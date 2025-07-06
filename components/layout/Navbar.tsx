@@ -37,6 +37,9 @@ const Navbar = () => {
             <Link href="/seller-register" className="text-gray-700 hover:text-farm-green transition-colors">
               Become a Seller
             </Link>
+                        <Link href="/history" className="text-gray-700 hover:text-farm-green transition-colors">
+              History
+            </Link>
             <Link href="/contact" className="text-gray-700 hover:text-farm-green transition-colors">
               Contact
             </Link>
