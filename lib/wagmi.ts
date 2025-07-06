@@ -12,7 +12,7 @@ export const config = getDefaultConfig({
   },
   ssr: false,
 });
-
+//@ts-ignore
 export const publicClient = config.getClient().extend(publicActions);
 
 export const writeConfig = createConfig({
