@@ -1,5 +1,6 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { http, publicActions } from "viem";
+import { createConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
 
 export const config = getDefaultConfig({
@@ -13,3 +14,10 @@ export const config = getDefaultConfig({
 });
 
 export const publicClient = config.getClient().extend(publicActions);
+
+export const writeConfig = createConfig({
+  chains: [sepolia],
+  transports: {
+    [sepolia.id]: http(),
+  },
+});
