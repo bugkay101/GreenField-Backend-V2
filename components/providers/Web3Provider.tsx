@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   connectorsForWallets,
+  RainbowKitAuthenticationProvider,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import {
@@ -12,6 +13,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { sepolia } from "wagmi/chains";
+import { authenticationAdapter } from "@/lib/auth-adapter";
 
 // Create connectors without WalletConnect to avoid ES module conflicts
 const connectors = connectorsForWallets(
@@ -41,24 +43,29 @@ interface Web3ProviderProps {
 }
 
 export function Web3Provider({ children }: Web3ProviderProps) {
+  const AUTHENTICATION_STATUS ='unauthenticated'; //'loading' | "authenticated"
   // Create a new QueryClient instance for each user session
   const [queryClient] = useState(
-    () => new QueryClient({
-      defaultOptions: {
-        queries: {
-          staleTime: 1000 * 60 * 5, // 5 minutes
-          refetchOnWindowFocus: false,
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60 * 5, // 5 minutes
+            refetchOnWindowFocus: false,
+          },
         },
-      },
-    })
+      })
   );
 
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={config}>
-        <RainbowKitProvider>
-          {children}
-        </RainbowKitProvider>
+        <RainbowKitAuthenticationProvider
+          adapter={authenticationAdapter}
+          status={AUTHENTICATION_STATUS}
+        >
+          <RainbowKitProvider>{children}</RainbowKitProvider>
+        </RainbowKitAuthenticationProvider>
       </WagmiProvider>
     </QueryClientProvider>
   );
