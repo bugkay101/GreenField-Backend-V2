@@ -24,6 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           return res.status(422).json({ message: "Invalid nonce." });
 
         req.session.siwe = siweMessage;
+        
         await req.session.save();
         res.json({ ok: true });
       } catch (_error) {
