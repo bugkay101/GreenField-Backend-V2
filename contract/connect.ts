@@ -17,7 +17,7 @@ import { ethers } from "ethers";
 //     throw new Error(`Failed to initialize contract connection`);
 //   }
 // };
-const connectEther = () => {
+export const connectEther = () => {
   try {
     const provider = new ethers.providers.JsonRpcProvider(
       "https://sepolia-eth.w3node.com/73c1c8769381adf0e5969d8f8e44af73ad0a55053c466f1d965d5e1bbf0765ff/api"
@@ -32,4 +32,3 @@ const connectEther = () => {
     throw new Error(`Failed to initialize contract`);
   }
 };
-module.exports = connectEther;

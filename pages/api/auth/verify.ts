@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { parseSiweMessage, type SiweMessage } from "viem/siwe";
 import { ironOptions } from "@/lib/iron";
 import { publicClient } from "@/lib/wagmi";
+import { db } from "@/lib/db";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
@@ -19,12 +20,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         if (!success) throw new Error("Invalid signature.");
-
+        //@ts-ignore
         if (siweMessage.nonce !== req.session.nonce)
           return res.status(422).json({ message: "Invalid nonce." });
-
+        //@ts-ignore
         req.session.siwe = siweMessage;
-        
+        const address = siweMessage.address;
+        const user = await db.user.findUnique({ where: { address } });
+        if (!user) {
+          await db.user.create({ data: { address } });
+        }
         await req.session.save();
         res.json({ ok: true });
       } catch (_error) {
