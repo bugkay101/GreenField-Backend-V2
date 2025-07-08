@@ -29,11 +29,10 @@ const removeSeller = async (address: string) => {
 };
 
 const createItem = async (
-  author: string,
   name: string,
   category: string,
   image: string,
-  product: string,
+  unit: string,
   description: string,
   cost: number,
   stock: number
@@ -44,11 +43,10 @@ const createItem = async (
     abi,
     functionName: "list",
     args: [
-      author,
       name,
       category,
       image,
-      product,
+      unit,
       description,
       costEthers,
       stock,
@@ -64,7 +62,7 @@ const editItem = async (
   name: string,
   category: string,
   image: string,
-  product: string,
+  unit: string,
   description: string,
   cost: number,
   stock: number
@@ -74,16 +72,7 @@ const editItem = async (
     address,
     abi,
     functionName: "editItem",
-    args: [
-      id,
-      name,
-      category,
-      image,
-      product,
-      description,
-      costEthers,
-      stock,
-    ],
+    args: [id, name, category, image, unit, description, costEthers, stock],
   });
 
   const hash = await writeContract(writeConfig, request);
