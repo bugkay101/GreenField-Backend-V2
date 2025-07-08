@@ -78,7 +78,7 @@ const ItemForm = ({ item, onSubmit, onCancel }: ItemFormProps) => {
       return `https://sapphire-payable-gull-606.mypinata.cloud/ipfs/${ipfsHash}`;
     } catch {
       toast.error("Trouble uploading file");
-      return null;
+      return "";
     }
   };
 
