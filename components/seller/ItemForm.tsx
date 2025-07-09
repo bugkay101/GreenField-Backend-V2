@@ -79,9 +79,6 @@ const ItemForm = ({ item, onSubmit, onCancel }: ItemFormProps) => {
       }
 
       const { ipfsHash } = await res.json();
-      console.log(
-        `https://sapphire-payable-gull-606.mypinata.cloud/ipfs/${ipfsHash}`
-      );
       return `https://sapphire-payable-gull-606.mypinata.cloud/ipfs/${ipfsHash}`;
     } catch (error) {
       toast.error("Trouble uploading file");
