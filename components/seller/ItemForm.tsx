@@ -67,20 +67,28 @@ const ItemForm = ({ item, onSubmit, onCancel }: ItemFormProps) => {
   const uploadFile = async (file: File): Promise<string | null> => {
     try {
       const formData = new FormData();
-      formData.append("file", file, file.name);
+      formData.append("file", file, file.name); // ✅ use name "file" to match backend
 
       const res = await fetch("/api/file", {
         method: "POST",
         body: formData,
       });
 
-      const ipfsHash = await res.text();
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const { ipfsHash } = await res.json();
+      console.log(
+        `https://sapphire-payable-gull-606.mypinata.cloud/ipfs/${ipfsHash}`
+      );
       return `https://sapphire-payable-gull-606.mypinata.cloud/ipfs/${ipfsHash}`;
-    } catch {
+    } catch (error) {
       toast.error("Trouble uploading file");
-      return "";
+      return null;
     }
   };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -196,6 +204,7 @@ const ItemForm = ({ item, onSubmit, onCancel }: ItemFormProps) => {
         <Input
           id="image"
           type="file"
+          name="file" // ✅ critical to match backend field name
           accept="image/*"
           onChange={handleFileChange}
         />
